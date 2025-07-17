@@ -24,7 +24,6 @@ class UsersRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'users_id' => 'required|string',
             'users_name' => 'required|string',
             'users_email' => 'required|string',
             'users_job_name' => 'required|string'
@@ -34,9 +33,6 @@ class UsersRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'users_id.required' => 'O campo ID do usuário é obrigatório.',
-            'users_id.string' => 'O campo ID do usuário deve ser uma string.',
-
             'users_name.required' => 'O campo nome do usuário é obrigatório.',
             'users_name.string' => 'O campo nome do usuário deve ser uma string.',
 

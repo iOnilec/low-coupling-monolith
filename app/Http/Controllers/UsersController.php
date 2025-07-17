@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UsersRequest;
 use App\Models\User;
+use App\Services\JobsServices;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         try {
             $users = User::all();
@@ -34,12 +37,14 @@ class UsersController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(UsersRequest $request)
+    public function store(UsersRequest $request, JobsServices $jobs_services): JsonResponse
     {
         try {
             $validated = $request->validated();
 
             $user = User::create($validated);
+
+            $jobs_services->create_jobs($user['users_job_name']);
 
             return response()->json([
                 'status' => 201,
@@ -58,7 +63,7 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $users_id)
+    public function show(string $users_id): JsonResponse
     {
         try {
             $id = User::where('users_id', $users_id)->first();
@@ -87,7 +92,7 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UsersRequest $request, string $users_id)
+    public function update(UsersRequest $request, string $users_id): JsonResponse
     {
         try {
             $validated = $request->validated();
@@ -120,7 +125,7 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, string $users_id)
+    public function destroy(Request $request, string $users_id): JsonResponse
     {
         try {
             $id = User::where('users_id', $users_id)->first();
